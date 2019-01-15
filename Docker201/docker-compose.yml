@@ -1,0 +1,41 @@
+version: '2'
+services:
+        heroesdb:
+                build: ./heroesdb
+                image: heroes-mysql:1.0
+                restart: always
+                networks:
+                        - backend
+                environment:
+                        - MYSQL_ROOT_PASSWORD=root
+                volumes:
+                        - ./mysql-data/:/var/lib/mysql
+                ports:
+                        - "3306:3306"
+        heroes-backend:
+                image: maddockerpractice/docker-heroes:1.0
+                restart: always
+                depends_on:
+                        - heroesdb
+                networks:
+                        - backend
+                        - frontend
+                environment:
+                        - MYSQL_ROOT_PASSWORD=root
+                ports:
+                        - "8080:8080"
+        heroes-frontend:
+                image: maddockerpractice/heroes-frontend:1.0
+                restart: always
+                networks:
+                        - frontend
+                ports:
+                        - "80:80"
+volumes:
+        data-mysql:
+                driver: local
+networks:
+        backend:
+                driver: bridge
+        frontend:
+                driver: bridge

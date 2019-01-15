@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: docker-heroes-service
+  profiles:
+    active: qa
